@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/app')
 def hello():
-    return 'Webhooks with Python'
+    return '<head><title>Webhooks with Python</title></head><body><h1>Webhooks with Python</h1></body>'
 
 @app.route('/app/webhooks',methods=['GET','POST'])
 def webhooks():
