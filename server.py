@@ -1,5 +1,7 @@
+import hmac
 from os import environ
-from flask import Flask,request,json,redirect,url_for
+from flask import Flask,request,json,redirect,url_for,abort
+from hashlib import sha1
 
 app = Flask(__name__)
 
@@ -11,9 +13,22 @@ def hello():
 def webhooks():
     if request.method == 'POST' and request.is_json:
         data = request.json
+        # Look for the signature in the request headers
+        if "X-Hub-Signature" not in request.headers:
+            abort(403)
+
+        signature = request.headers.get("X-Hub-Signature", "").split("=")[1]
+
+        # Generate our own signature based on the request payload
+        secret = environ['APP_SECRET'].encode('utf-8')
+        mac = hmac.new(secret, msg=request.data, digestmod=sha1)
+        # Ensure the two signatures match
+        if not str(mac.hexdigest()) == str(signature):
+            abort(403)
+
         print(data['object'])
         for entry in data['entry']:
-            print("{} {}".format(entry['id'],entry['time']))
+            print("id:{} time:{}".format(entry['id'],entry['time']))
             for change in entry['changes']:
                 if change['field'] == "certificate":
                     print('NEW CERT ISSUED')
