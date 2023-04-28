@@ -1,13 +1,17 @@
 import hmac
 from os import environ
-from flask import Flask,request,json,redirect,url_for,abort
+from flask import Flask,request,json,redirect,url_for,abort,jsonify
 from hashlib import sha1
 
 app = Flask(__name__)
 
 @app.route('/app')
 def hello():
-    return '<head><title>Webhooks with Python</title></head><body><h1>Webhooks with Python</h1></body>'
+    # response = jsonify({'ip': request.remote_addr})
+    response = jsonify({'True-Client-IP': request.headers['True-Client-IP']})
+    print(request.headers['True-Client-IP'])
+    print(request.headers['User-Agent'])
+    return response
 
 @app.route('/app/webhooks',methods=['GET','POST'])
 def webhooks():
