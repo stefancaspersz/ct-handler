@@ -7,8 +7,12 @@ app = Flask(__name__)
 
 @app.route('/app')
 def hello():
-    # response = jsonify({'ip': request.remote_addr})
-    response = jsonify({'True-Client-IP': request.headers['True-Client-IP'],'X-Forwarded-For': request.headers['X-Forwarded-For']})
+    try:
+        # this only works when a reverse proxy like nginx provides the headers
+        response = jsonify({'True-Client-IP': request.headers['True-Client-IP'],'X-Forwarded-For': request.headers['X-Forwarded-For']})
+    except:
+        # looks like we have not recieved the correct headers
+        response = jsonify({'ip': request.remote_addr})
     print(request.headers)
     return response
 
