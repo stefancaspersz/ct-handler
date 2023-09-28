@@ -8,9 +8,8 @@ app = Flask(__name__)
 @app.route('/app')
 def hello():
     # response = jsonify({'ip': request.remote_addr})
-    response = jsonify({'True-Client-IP': request.headers['True-Client-IP']})
-    print(request.headers['True-Client-IP'])
-    print(request.headers['User-Agent'])
+    response = jsonify({'True-Client-IP': request.headers['True-Client-IP'],'X-Forwarded-For': request.headers['X-Forwarded-For']})
+    print(request.headers)
     return response
 
 @app.route('/app/webhooks',methods=['GET','POST'])
