@@ -1,6 +1,6 @@
 import hmac
 from os import environ
-from flask import Flask,request,json,redirect,url_for,abort,jsonify
+from flask import Flask,request,redirect,url_for,abort,jsonify
 from hashlib import sha1
 
 app = Flask(__name__)
