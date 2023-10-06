@@ -5,7 +5,7 @@ from hashlib import sha1
 
 app = Flask(__name__)
 
-@app.route('/app')
+@app.route('/app',methods=['GET'])
 def hello():
     try:
         # this only works when a reverse proxy like nginx provides the headers
@@ -15,7 +15,7 @@ def hello():
         response = jsonify({'ip': request.remote_addr})
     print(request.headers)
     return response
-
+   
 @app.route('/app/webhooks',methods=['GET','POST'])
 def webhooks():
     if request.method == 'POST' and request.is_json:
@@ -57,6 +57,4 @@ def webhooks():
             return redirect(url_for('hello'))
 
 if __name__ == '__main__':
-    app.debug=True
     app.run()
-
